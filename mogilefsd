@@ -1,0 +1,94 @@
+#!/usr/bin/perl
+#
+# Parameters supported:
+#
+# 	config
+# 	autoconf
+#
+# Magic markers:
+#%# family=auto
+#%# capabilities=autoconf
+
+use strict;
+use warnings;
+use IO::Socket::INET;
+
+=head1 NAME
+
+mogilefsd - A munin plugin that collects stats from your MogileFS tracker
+
+=head1 APPLICABLE SYSTEMS
+
+MogileFS Trackers
+
+=head1 CONFIGURATION
+
+By default the plugin will check localhost, port 7001. If you want to change either the 
+port or, if you're so inclined, a different host, set the following in your config:
+
+    [mogilefsd]
+        env.mog_tracker 127.0.0.1
+	env.mog_port 7001
+
+=head1 BUGS
+
+None known so far. If you find any, let me know.
+
+=head1 AUTHOR
+
+Squeeks - c<squeek@cpan.org>
+
+=head1 LICENSE
+
+Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+=cut
+
+
+if($ARGV[0] and $ARGV[0] eq 'config')
+{
+	print "graph_title MogileFS Tracker status\n";
+	print "graph_category mogilefs\n";
+	print "graph_scale no\n";
+	print "graph_info Tracker is currently \$peer.";
+
+	print "pending.label Pending Queries\n"."pending.type GAUGE\n";
+	print "processing.label \n"."processing.type GAUGE\n";
+	print "bored.label Bored Workers\n"."bored.type GAUGE\n";
+	print "fsckqueue.label \n"."fsckqueue.type GAUGE\n";
+
+	exit 0;
+}
+elsif($ARGV[0] eq 'autoconf')
+{
+	my $sock = IO::Socket::INET->new(
+			PeerAddr => $ENV{MOG_TRACKER} || '127.0.0.1', 
+			PeerPort => $ENV{MOG_PORT}    || '7001', 
+			Proto    => 'tcp')
+	or die("Could not create socket - ".$!);
+
+	print $sock "!stats\n";
+
+	my @rows;
+	while(<$sock>)
+	{
+		last if($_ eq "\x2E\x0D\x0A"); 
+		my ($row) = $_ =~/^(.*)\x0D\x0A$/; 
+		push @rows, $row;
+	}
+
+	close($sock);
+
+	my ($pending)    = $rows[1] =~/(\d+)$/ if($rows[1] && $rows[1] =~/^pending/);
+	my ($processing) = $rows[2] =~/(\d+)$/ if($rows[2] && $rows[2] =~/^processing/);
+	my ($bored)      = $rows[3] =~/(\d+)$/ if($rows[3] && $rows[3] =~/^bored/);
+	my ($fsckqueue)  = $rows[4] =~/(\d+)$/ if($rows[4] && $rows[4] =~/^work/);
+
+	print "pending.value $pending\n" 	if $pending || $pending eq '0';
+	print "processing.value $processing\n" 	if $processing || $processing eq '0';
+	print "bored.value $bored\n" 		if $bored || $bored eq '0';
+	print "fsckqueue.value $fsckqueue\n" 	if $fsckqueue || $fsckqueue eq '0';
+
+}
+
+# EOF

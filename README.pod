@@ -1,0 +1,30 @@
+=head1 NAME
+
+mogilefsd - A munin plugin that collects stats from your MogileFS tracker
+
+=head1 APPLICABLE SYSTEMS
+
+MogileFS Trackers
+
+=head1 CONFIGURATION
+
+By default the plugin will check localhost, port 7001. If you want to change either the 
+port or, if you're so inclined, a different host, set the following in your config:
+
+    [mogilefsd]
+        env.mog_tracker 127.0.0.1
+	env.mog_port 7001
+
+=head1 BUGS
+
+None known so far. If you find any, let me know.
+
+=head1 AUTHOR
+
+Squeeks - c<squeek@cpan.org> - L<http://github.com/squeeks>
+
+=head1 LICENSE
+
+Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+=cut
