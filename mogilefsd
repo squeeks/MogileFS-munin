@@ -56,6 +56,7 @@ if($ARGV[0] and $ARGV[0] eq 'config')
 	print "processing.label \n"."processing.type GAUGE\n";
 	print "bored.label Bored Workers\n"."bored.type GAUGE\n";
 	print "fsckqueue.label \n"."fsckqueue.type GAUGE\n";
+	print "queries.label Queries\n"."queries.type COUNTER\n";
 
 	exit 0;
 }
@@ -84,10 +85,21 @@ elsif($ARGV[0] eq 'autoconf')
 	my ($bored)      = $rows[3] =~/(\d+)$/ if($rows[3] && $rows[3] =~/^bored/);
 	my ($fsckqueue)  = $rows[4] =~/(\d+)$/ if($rows[4] && $rows[4] =~/^work/);
 
+        my $queries = undef;
+	if($rows[4] && $rows[4] =~/^queries/)
+	{
+		($queries)    = $rows[4] =~/(\d+)$/;
+	}
+	elsif($rows[5] && $rows[5] =~/^queries/)
+	{
+		($queries)    = $rows[5] =~/(\d+)$/;
+	}
+
         if($pending)    { print "pending.value $pending\n"; }       else{ print "pending.value 0\n"; }
         if($processing) { print "processing.value $processing\n"; } else{ print "processing.value 0\n"; }
         if($bored)      { print "bored.value $bored\n"; }           else{ print "bored.value 0\n"; }
         if($fsckqueue)  { print "fsckqueue.value $fsckqueue\n"; }   else{ print "fsckqueue.value 0\n"; }
+        if($queries)    { print "queries.value $queries\n"; }       else{ print "queries.value 0\n"; }
 
 }
 
