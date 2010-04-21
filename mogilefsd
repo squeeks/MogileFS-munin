@@ -59,7 +59,7 @@ if($ARGV[0] and $ARGV[0] eq 'config')
 
 	exit 0;
 }
-elsif($ARGV[0] eq 'autoconf')
+elsif(!$ARGV[0] || $ARGV[0] eq 'autoconf')
 {
 	my $sock = IO::Socket::INET->new(
 			PeerAddr => $ENV{MOG_TRACKER} || '127.0.0.1', 
