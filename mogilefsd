@@ -50,7 +50,6 @@ if($ARGV[0] and $ARGV[0] eq 'config')
 	print "graph_title MogileFS Tracker status\n";
 	print "graph_category mogilefs\n";
 	print "graph_scale no\n";
-	print "graph_info Tracker is currently \$peer.";
 
 	print "pending.label Pending Queries\n"."pending.type GAUGE\n";
 	print "processing.label \n"."processing.type GAUGE\n";
