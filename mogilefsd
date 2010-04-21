@@ -84,10 +84,10 @@ elsif($ARGV[0] eq 'autoconf')
 	my ($bored)      = $rows[3] =~/(\d+)$/ if($rows[3] && $rows[3] =~/^bored/);
 	my ($fsckqueue)  = $rows[4] =~/(\d+)$/ if($rows[4] && $rows[4] =~/^work/);
 
-	print "pending.value $pending\n" 	if $pending || $pending eq '0';
-	print "processing.value $processing\n" 	if $processing || $processing eq '0';
-	print "bored.value $bored\n" 		if $bored || $bored eq '0';
-	print "fsckqueue.value $fsckqueue\n" 	if $fsckqueue || $fsckqueue eq '0';
+        if($pending)    { print "pending.value $pending\n"; }       else{ print "pending.value 0\n"; }
+        if($processing) { print "processing.value $processing\n"; } else{ print "processing.value 0\n"; }
+        if($bored)      { print "bored.value $bored\n"; }           else{ print "bored.value 0\n"; }
+        if($fsckqueue)  { print "fsckqueue.value $fsckqueue\n"; }   else{ print "fsckqueue.value 0\n"; }
 
 }
 
