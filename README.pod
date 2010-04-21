@@ -21,10 +21,10 @@ None known so far. If you find any, let me know.
 
 =head1 AUTHOR
 
-Squeeks - c<squeek@cpan.org> - L<http://github.com/squeeks>
+Squeeks - squeek@cpan.org - L<http://github.com/squeeks>
 
 =head1 LICENSE
 
-Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+Licensed under the MIT license: L<http://www.opensource.org/licenses/mit-license.php>
 
 =cut
