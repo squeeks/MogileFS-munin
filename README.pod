@@ -8,12 +8,15 @@ MogileFS Trackers
 
 =head1 CONFIGURATION
 
-By default the plugin will check localhost, port 7001. If you want to change either the 
-port or, if you're so inclined, a different host, set the following in your config:
+By default the plugin will check localhost, port 7001. If you want to change the port set the following in your config:
 
     [mogilefsd]
-        env.mog_tracker 127.0.0.1
 	env.mog_port 7001
+
+If you'd like to test a different host, then symlink the script with an
+underscored followed by the hostname or IP.
+
+    ln -s /usr/share/munin/plugins/mogilefsd /etc/munin/plugins/mogilefsd_tracker1.domain.com
 
 =head1 BUGS
 
