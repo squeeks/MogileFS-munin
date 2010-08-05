@@ -12,6 +12,8 @@
 use strict;
 use warnings;
 use IO::Socket::INET;
+use FindBin;
+use Munin::Plugin;
 
 =head1 NAME
 
@@ -23,12 +25,16 @@ MogileFS Trackers
 
 =head1 CONFIGURATION
 
-By default the plugin will check localhost, port 7001. If you want to change either the 
-port or, if you're so inclined, a different host, set the following in your config:
+By default the plugin will check localhost, port 7001. If you want to change
+the port set the following in your config:
 
     [mogilefsd]
-        env.mog_tracker 127.0.0.1
-	env.mog_port 7001
+        env.mog_port 7001
+
+If you'd like to test a different host, then symlink the script with an
+underscored followed by the hostname or IP:
+
+    ln -s /usr/share/munin/plugins/mogilefsd /etc/munin/plugins/mogilefsd_tracker1.domain.com
 
 =head1 BUGS
 
@@ -44,10 +50,12 @@ Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.p
 
 =cut
 
+my $host = $FindBin::Script;
+clean_fieldname($host =~ s/mogilefsd_//);
 
 if($ARGV[0] and $ARGV[0] eq 'config')
 {
-	print "graph_title MogileFS Tracker status\n";
+	print "graph_title MogileFS $host Tracker status\n";
 	print "graph_category mogilefs\n";
 	print "graph_scale no\n";
 
@@ -61,8 +69,8 @@ if($ARGV[0] and $ARGV[0] eq 'config')
 }
 elsif(!$ARGV[0] || $ARGV[0] eq 'autoconf')
 {
-	my $sock = IO::Socket::INET->new(
-			PeerAddr => $ENV{MOG_TRACKER} || '127.0.0.1', 
+    my $sock = IO::Socket::INET->new(
+            PeerAddr => $host || '127.0.0.1',
 			PeerPort => $ENV{MOG_PORT}    || '7001', 
 			Proto    => 'tcp')
 	or die("Could not create socket - ".$!);
