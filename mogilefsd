@@ -51,7 +51,7 @@ Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.p
 =cut
 
 my $host = $FindBin::Script;
-clean_fieldname($host =~ s/mogilefsd_//);
+clean_fieldname($host =~ s/mogilefsd_?//);
 
 if($ARGV[0] and $ARGV[0] eq 'config')
 {
